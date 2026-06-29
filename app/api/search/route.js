@@ -8,7 +8,8 @@ export async function POST(request) {
   if (tool === 'number') {
     url = `https://number2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&mobile=${query}`;
   } else if (tool === 'aadhaar') {
-    url = `https://adhaar2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&id=${query}`;
+        url = `https://adhaar-to-info-hidb-noobster.com-dashbord63hh7qe4.workers.dev/?aadhar=${query}`;
+    
   } else if (tool === 'vehicle') {
     url = `https://vehicle2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&rc=${query}`;
   } else if (tool === 'vehicle-advance') {
