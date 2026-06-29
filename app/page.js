@@ -6,109 +6,175 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const tools = [
     { id: "number", icon: "📱", label: "Number to Info", desc: "Phone number intelligence", placeholder: "e.g. 9999999991" },
     { id: "aadhaar", icon: "🪪", label: "Aadhaar to Info", desc: "Aadhaar identity lookup", placeholder: "Enter 12 digit Aadhaar" },
     { id: "vehicle", icon: "🚗", label: "Vehicle to Info", desc: "Basic RC lookup", placeholder: "e.g. RJ18CF3690" },
     { id: "vehicle-advance", icon: "🛻", label: "Vehicle Advance Info", desc: "Deep RC intelligence", placeholder: "e.g. RJ18CF3690" },
-    { id: "tg", icon: "🚀", label: "TG to Num", desc: "Telegram ID lookup", placeholder: "e.g. 123456789" },
+    { id: "tg", icon: "✈️", label: "TG to Num", desc: "Telegram ID lookup", placeholder: "e.g. 123456789" },
     { id: "ip", icon: "🌐", label: "IP to Info", desc: "Geo & network intel", placeholder: "e.g. 8.8.8.8" },
     { id: "gmail", icon: "✉️", label: "Gmail to Info", desc: "Email account lookup", placeholder: "name@gmail.com" }
   ];
+
+  // Ye function API ke output ko raste me hijack karke tumhara credit dal dega
+  const hijackData = (obj) => {
+    if (typeof obj !== 'object' || obj === null) return obj;
+    if (Array.isArray(obj)) return obj.map(hijackData);
+
+    const newObj = { ...obj };
+    for (let key in newObj) {
+      if (key.toLowerCase() === 'developer' || key.toLowerCase() === 'dev') {
+        newObj[key] = '@Ph4ntomXeye';
+        continue;
+      }
+      if (key.toLowerCase() === 'channel' || key.toLowerCase() === 'telegram') {
+        newObj[key] = 'https://t.me/GhostxProtoc0l';
+        continue;
+      }
+      
+      if (typeof newObj[key] === 'string') {
+        if (newObj[key].toLowerCase().includes('noob')) {
+          newObj[key] = '@Ph4ntomXeye';
+        }
+        if (newObj[key].includes('t.me/')) {
+          newObj[key] = 'https://t.me/GhostxProtoc0l';
+        }
+      } else if (typeof newObj[key] === 'object') {
+        newObj[key] = hijackData(newObj[key]);
+      }
+    }
+    return newObj;
+  };
 
   const handleSearch = async () => {
     if (!query) return;
     setLoading(true);
     setResult(null);
+    setCopied(false);
     try {
       const res = await fetch('/api/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tool: activeTool.id, query: query.trim() })
       });
-      const data = await res.json();
-      setResult(data);
+      const rawData = await res.json();
+      
+      // Data hijack and overwrite
+      const customizedData = hijackData(rawData);
+      setResult(customizedData);
     } catch (e) {
-      setResult({ error: "Connection Failed." });
+      setResult({ error: "Connection Failed. Please try again." });
     }
     setLoading(false);
   };
 
+  const handleCopy = () => {
+    if (result) {
+      navigator.clipboard.writeText(JSON.stringify(result, null, 2));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#050505] text-white p-4 sm:p-6 font-sans">
-      <header className="max-w-4xl mx-auto backdrop-blur-xl bg-white/5 border border-white/10 rounded-2xl p-4 flex items-center gap-4 shadow-xl">
-        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-600 to-fuchsia-500 flex items-center justify-center text-xl shadow-lg shadow-purple-500/30">
-          🛡️
-        </div>
-        <div>
-          <h1 className="font-extrabold text-2xl tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">
-            𝖫Ξ𝖮⟁𝗘𝗬Ξ
-          </h1>
-          <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-1">BY LEO</p>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto mt-12 text-center">
-        {!activeTool ? (
-          <>
-            <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-xs text-gray-300 mb-6">
-              <span className="text-purple-400">🔍</span> 7 intelligence tools ready
+    <div className="min-h-screen bg-[#050505] text-gray-100 font-sans selection:bg-purple-500/30">
+      <div className="fixed inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_15%_20%,rgba(139,92,246,0.15),transparent_60%),radial-gradient(ellipse_50%_45%_at_85%_15%,rgba(217,70,239,0.15),transparent_60%)] pointer-events-none"></div>
+      
+      <div className="relative z-10 p-4 sm:p-6">
+        <header className="max-w-5xl mx-auto sticky top-4 z-20">
+          <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex items-center gap-4 shadow-2xl">
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-2xl shadow-lg shadow-purple-500/20 border border-white/10">
+              🛡️
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold mb-12">
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-fuchsia-300">Open-source</span><br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 via-purple-400 to-cyan-300">intelligence, beautifully.</span>
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
-              {tools.map((t) => (
-                <button 
-                  key={t.id} 
-                  onClick={() => setActiveTool(t)}
-                  className="p-6 rounded-3xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-purple-500/50 transition-all shadow-lg text-left group"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="text-3xl bg-white/5 p-3 rounded-xl border border-white/10">{t.icon}</div>
-                    <div className="text-gray-500 group-hover:text-white transition-colors">↗</div>
-                  </div>
-                  <h3 className="font-bold text-lg">{t.label}</h3>
-                  <p className="text-[10px] text-purple-400 uppercase tracking-widest mt-1 mb-2">{t.desc}</p>
-                </button>
-              ))}
+            <div className="leading-tight">
+              <h1 className="font-extrabold text-xl tracking-wide">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">𝖫Ξ𝖮⟁𝗘𝗬Ξ</span>
+              </h1>
+              <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">BY LEO</p>
             </div>
-          </>
-        ) : (
-          <div className="max-w-xl mx-auto mt-8 p-6 sm:p-8 bg-white/5 border border-white/10 rounded-3xl shadow-2xl">
-            <button onClick={() => {setActiveTool(null); setResult(null); setQuery("");}} className="text-sm text-gray-400 hover:text-white mb-8 flex items-center gap-2">
-              ← Back to Tools
-            </button>
-            <div className="text-5xl mb-6">{activeTool.icon}</div>
-            <h2 className="text-3xl font-bold mb-2">{activeTool.label}</h2>
-            <p className="text-purple-400 text-xs uppercase tracking-widest mb-8">{activeTool.desc}</p>
-            
-            <input 
-              type="text" 
-              placeholder={activeTool.placeholder}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full p-4 bg-[#0a0a0a] border border-gray-700 rounded-xl mb-6 focus:outline-none focus:border-purple-500 text-white"
-            />
-            <button 
-              onClick={handleSearch}
-              className="w-full p-4 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl font-bold tracking-widest hover:opacity-90 transition-opacity"
-            >
-              {loading ? "SCANNING..." : "EXECUTE"}
-            </button>
-
-            {result && (
-              <div className="mt-8 text-left bg-black/60 p-5 rounded-xl border border-gray-800 overflow-x-auto">
-                <pre className="text-xs text-green-400 whitespace-pre-wrap font-mono">
-                  {JSON.stringify(result, null, 2)}
-                </pre>
-              </div>
-            )}
+            <div className="ml-auto hidden sm:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-[11px] text-gray-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
+              All systems online
+            </div>
           </div>
-        )}
-      </main>
+        </header>
+
+        <main className="max-w-5xl mx-auto mt-16 text-center pb-20">
+          {!activeTool ? (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-[11px] text-gray-400 mb-8 shadow-sm">
+                <span className="text-purple-400">🔍</span> 7 intelligence tools ready
+              </div>
+              <h2 className="text-4xl sm:text-6xl font-extrabold mb-12 tracking-tight leading-tight">
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-fuchsia-300">Open-source</span><br/>
+                <span className="text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 via-purple-400 to-cyan-300">intelligence, beautifully.</span>
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
+                {tools.map((t) => (
+                  <button 
+                    key={t.id} 
+                    onClick={() => setActiveTool(t)}
+                    className="group p-6 rounded-3xl bg-white/[0.04] backdrop-blur-sm border border-white/10 hover:bg-white/[0.08] hover:-translate-y-1 hover:border-purple-500/30 hover:shadow-[0_8px_32px_rgba(168,85,247,0.15)] transition-all duration-300 text-left"
+                  >
+                    <div className="flex justify-between items-start mb-5">
+                      <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-white/10 to-transparent border border-white/10 flex items-center justify-center text-2xl shadow-inner group-hover:scale-110 transition-transform">
+                        {t.icon}
+                      </div>
+                      <div className="text-gray-500 group-hover:text-purple-400 transition-colors">↗</div>
+                    </div>
+                    <h3 className="font-bold text-lg text-gray-100">{t.label}</h3>
+                    <p className="text-[10px] text-fuchsia-400/80 font-medium uppercase tracking-[0.15em] mt-1 mb-3">{t.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="max-w-xl mx-auto mt-4 p-6 sm:p-8 bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl animate-in zoom-in-95 duration-300">
+              <button onClick={() => {setActiveTool(null); setResult(null); setQuery("");}} className="text-xs text-gray-400 hover:text-white mb-8 flex items-center gap-2 transition-colors">
+                ← Back to Tools
+              </button>
+              <div className="text-5xl mb-6 flex justify-center">
+                <div className="bg-white/5 p-4 rounded-3xl border border-white/10 shadow-inner">{activeTool.icon}</div>
+              </div>
+              <h2 className="text-3xl font-bold mb-2 text-gray-100">{activeTool.label}</h2>
+              <p className="text-fuchsia-400/80 text-[10px] font-medium uppercase tracking-[0.15em] mb-8">{activeTool.desc}</p>
+              
+              <input 
+                type="text" 
+                placeholder={activeTool.placeholder}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full p-4 bg-black/40 border border-white/10 rounded-2xl mb-6 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent text-white placeholder-gray-600 transition-all shadow-inner"
+              />
+              <button 
+                onClick={handleSearch}
+                className="w-full p-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 rounded-2xl font-bold tracking-widest text-sm shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all active:scale-[0.98]"
+              >
+                {loading ? "SCANNING..." : "EXECUTE"}
+              </button>
+
+              {result && (
+                <div className="relative mt-8 text-left bg-[#0a0a0a]/80 backdrop-blur-md p-5 rounded-2xl border border-white/10 shadow-inner group">
+                  <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2">
+                    <span className="text-xs text-gray-400 uppercase tracking-wider font-semibold">Intelligence Result</span>
+                    <button 
+                      onClick={handleCopy}
+                      className="flex items-center gap-2 text-xs bg-white/5 hover:bg-white/10 border border-white/10 px-3 py-1.5 rounded-lg transition-colors text-gray-300"
+                    >
+                      {copied ? "✓ Copied" : "📋 Copy"}
+                    </button>
+                  </div>
+                  <pre className="text-[11px] sm:text-xs text-emerald-400 whitespace-pre-wrap font-mono overflow-x-auto leading-relaxed">
+                    {JSON.stringify(result, null, 2)}
+                  </pre>
+                </div>
+              )}
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
