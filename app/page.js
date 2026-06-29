@@ -10,7 +10,7 @@ export default function Home() {
 
   const tools = [
     { id: "number", icon: "📱", label: "Number to Info", desc: "Basic phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
-    { id: "number-advance", icon: "📲", label: "Number Advance", desc: "Deep phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
+    { id: "number-advance", icon: "📲", label: "Number to Advance info", desc: "Deep phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
     { id: "aadhaar", icon: "🪪", label: "Aadhaar to Info", desc: "Aadhaar identity lookup", placeholder: "Enter 12 digits exactly (NO spaces)" },
     { id: "vehicle", icon: "🚗", label: "Vehicle to Info", desc: "Basic RC lookup", placeholder: "e.g., RJ18CF3690 (NO spaces or hyphens)" },
     { id: "vehicle-advance", icon: "🛻", label: "Vehicle Advance Info", desc: "Deep RC intelligence", placeholder: "e.g., RJ18CF3690 (NO spaces or hyphens)" },
@@ -19,32 +19,28 @@ export default function Home() {
     { id: "gmail", icon: "✉️", label: "Gmail to Info", desc: "Email account lookup", placeholder: "name@gmail.com" }
   ];
 
-  // Hijacks output to replace original dev details with yours
-  const hijackData = (obj) => {
+  // ADVANCED CLEANUP: Removes old traces completely instead of messy replacements
+  const cleanData = (obj) => {
     if (typeof obj !== 'object' || obj === null) return obj;
-    if (Array.isArray(obj)) return obj.map(hijackData);
+    if (Array.isArray(obj)) return obj.map(cleanData);
 
     const newObj = { ...obj };
     for (let key in newObj) {
-      if (['developer', 'dev', 'tag'].includes(key.toLowerCase())) {
-        newObj[key] = '@eyeXph4ntom';
-        continue;
-      }
-      if (['channel', 'telegram'].includes(key.toLowerCase())) {
-        newObj[key] = 'https://t.me/GhostxProtoc0l';
+      const lowerKey = key.toLowerCase();
+      // Remove any original developer or telegram keys entirely
+      if (['developer', 'dev', 'tag', 'channel', 'telegram', 'owner'].includes(lowerKey)) {
+        delete newObj[key];
         continue;
       }
       
       if (typeof newObj[key] === 'string') {
         const lowerVal = newObj[key].toLowerCase();
-        if (lowerVal.includes('noob') || lowerVal.includes('sahilxalone') || lowerVal.includes('ph4ntomxeye')) {
-          newObj[key] = '@eyeXph4ntom';
-        }
-        else if (lowerVal.includes('t.me/')) {
-          newObj[key] = 'https://t.me/GhostxProtoc0l';
+        // Remove nested string values that contain old names
+        if (lowerVal.includes('noob') || lowerVal.includes('sahilxalone') || lowerVal.includes('t.me/')) {
+          delete newObj[key];
         }
       } else if (typeof newObj[key] === 'object') {
-        newObj[key] = hijackData(newObj[key]);
+        newObj[key] = cleanData(newObj[key]);
       }
     }
     return newObj;
@@ -63,8 +59,28 @@ export default function Home() {
       });
       const rawData = await res.json();
       
-      const customizedData = hijackData(rawData);
-      setResult(customizedData);
+      // Step 1: Deep scrub of all original credits to make output clean
+      const cleanedData = cleanData(rawData);
+      
+      // Step 2: Append your credit exactly ONCE at the very end of the root object
+      let finalData;
+      if (Array.isArray(cleanedData)) {
+        finalData = {
+          results: cleanedData,
+          developer: "@Ph4ntomXeye",
+          channel: "https://t.me/GhostxProtoc0l"
+        };
+      } else if (typeof cleanedData === 'object' && cleanedData !== null) {
+        finalData = {
+          ...cleanedData,
+          developer: "@Ph4ntomXeye",
+          channel: "https://t.me/GhostxProtoc0l"
+        };
+      } else {
+        finalData = cleanedData;
+      }
+
+      setResult(finalData);
     } catch (e) {
       setResult({ error: "Connection Failed. Please try again." });
     }
@@ -180,5 +196,5 @@ export default function Home() {
       </div>
     </div>
   );
-            }
-                     
+    }
+                      
