@@ -11,6 +11,11 @@ export async function POST(request) {
     url = `https://adhaar2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&id=${query}`;
   } else if (tool === 'vehicle') {
     url = `https://vehicle2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&rc=${query}`;
+  } else if (tool === 'vehicle-advance') {
+    // Advance vehicle API doesn't use the KEY parameter according to your previous code snippet
+    url = `https://vehicleto-adavanceinfo-noobster.com-dashbord63hh7qe4.workers.dev/?rc=${query}`;
+  } else if (tool === 'tg') {
+    url = `https://tg-to-num-rate-limit.onrender.com/TG/user/=${query}`;
   } else if (tool === 'ip') {
     url = `https://ipwho.is/${query}`;
   } else if (tool === 'gmail') {
@@ -27,4 +32,3 @@ export async function POST(request) {
     return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
-
