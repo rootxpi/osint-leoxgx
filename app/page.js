@@ -9,36 +9,38 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
 
   const tools = [
-    { id: "number", icon: "📱", label: "Number to Info", desc: "Phone number intelligence", placeholder: "e.g. 9999999991" },
-    { id: "aadhaar", icon: "🪪", label: "Aadhaar to Info", desc: "Aadhaar identity lookup", placeholder: "Enter 12 digit Aadhaar" },
-    { id: "vehicle", icon: "🚗", label: "Vehicle to Info", desc: "Basic RC lookup", placeholder: "e.g. RJ18CF3690" },
-    { id: "vehicle-advance", icon: "🛻", label: "Vehicle Advance Info", desc: "Deep RC intelligence", placeholder: "e.g. RJ18CF3690" },
-    { id: "tg", icon: "✈️", label: "TG to Num", desc: "Telegram ID lookup", placeholder: "e.g. 123456789" },
-    { id: "ip", icon: "🌐", label: "IP to Info", desc: "Geo & network intel", placeholder: "e.g. 8.8.8.8" },
+    { id: "number", icon: "📱", label: "Number to Info", desc: "Basic phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
+    { id: "number-advance", icon: "📲", label: "Number Advance", desc: "Deep phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
+    { id: "aadhaar", icon: "🪪", label: "Aadhaar to Info", desc: "Aadhaar identity lookup", placeholder: "Enter 12 digits exactly (NO spaces)" },
+    { id: "vehicle", icon: "🚗", label: "Vehicle to Info", desc: "Basic RC lookup", placeholder: "e.g., RJ18CF3690 (NO spaces or hyphens)" },
+    { id: "vehicle-advance", icon: "🛻", label: "Vehicle Advance Info", desc: "Deep RC intelligence", placeholder: "e.g., RJ18CF3690 (NO spaces or hyphens)" },
+    { id: "tg", icon: "✈️", label: "TG to Num", desc: "Telegram ID lookup", placeholder: "e.g., 123456789 (Numeric ID only)" },
+    { id: "ip", icon: "🌐", label: "IP to Info", desc: "Geo & network intel", placeholder: "e.g., 8.8.8.8" },
     { id: "gmail", icon: "✉️", label: "Gmail to Info", desc: "Email account lookup", placeholder: "name@gmail.com" }
   ];
 
-  // Ye function API ke output ko raste me hijack karke tumhara credit dal dega
+  // Hijacks output to replace original dev details with yours
   const hijackData = (obj) => {
     if (typeof obj !== 'object' || obj === null) return obj;
     if (Array.isArray(obj)) return obj.map(hijackData);
 
     const newObj = { ...obj };
     for (let key in newObj) {
-      if (key.toLowerCase() === 'developer' || key.toLowerCase() === 'dev') {
-        newObj[key] = '@Ph4ntomXeye';
+      if (['developer', 'dev', 'tag'].includes(key.toLowerCase())) {
+        newObj[key] = '@eyeXph4ntom';
         continue;
       }
-      if (key.toLowerCase() === 'channel' || key.toLowerCase() === 'telegram') {
+      if (['channel', 'telegram'].includes(key.toLowerCase())) {
         newObj[key] = 'https://t.me/GhostxProtoc0l';
         continue;
       }
       
       if (typeof newObj[key] === 'string') {
-        if (newObj[key].toLowerCase().includes('noob')) {
-          newObj[key] = '@Ph4ntomXeye';
+        const lowerVal = newObj[key].toLowerCase();
+        if (lowerVal.includes('noob') || lowerVal.includes('sahilxalone') || lowerVal.includes('ph4ntomxeye')) {
+          newObj[key] = '@eyeXph4ntom';
         }
-        if (newObj[key].includes('t.me/')) {
+        else if (lowerVal.includes('t.me/')) {
           newObj[key] = 'https://t.me/GhostxProtoc0l';
         }
       } else if (typeof newObj[key] === 'object') {
@@ -61,7 +63,6 @@ export default function Home() {
       });
       const rawData = await res.json();
       
-      // Data hijack and overwrite
       const customizedData = hijackData(rawData);
       setResult(customizedData);
     } catch (e) {
@@ -92,7 +93,9 @@ export default function Home() {
               <h1 className="font-extrabold text-xl tracking-wide">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">𝖫Ξ𝖮⟁𝗘𝗬Ξ</span>
               </h1>
-              <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">BY LEO</p>
+              <p className="text-[10px] text-gray-400 uppercase tracking-widest mt-0.5">
+                ADVANCE OSINT TOOLS by <a href="https://t.me/Ph4ntomXeye" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline transition-colors">@Ph4ntomXeye</a>
+              </p>
             </div>
             <div className="ml-auto hidden sm:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-[11px] text-gray-300">
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
@@ -105,13 +108,13 @@ export default function Home() {
           {!activeTool ? (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
               <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-[11px] text-gray-400 mb-8 shadow-sm">
-                <span className="text-purple-400">🔍</span> 7 intelligence tools ready
+                <span className="text-purple-400">🔍</span> 8 intelligence tools ready
               </div>
               <h2 className="text-4xl sm:text-6xl font-extrabold mb-12 tracking-tight leading-tight">
                 <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-fuchsia-300">Open-source</span><br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-br from-fuchsia-300 via-purple-400 to-cyan-300">intelligence, beautifully.</span>
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left">
                 {tools.map((t) => (
                   <button 
                     key={t.id} 
@@ -152,7 +155,7 @@ export default function Home() {
                 onClick={handleSearch}
                 className="w-full p-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 rounded-2xl font-bold tracking-widest text-sm shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all active:scale-[0.98]"
               >
-                {loading ? "SCANNING..." : "EXECUTE"}
+                {loading ? "SEARCHING..." : "SEARCH"}
               </button>
 
               {result && (
@@ -177,4 +180,5 @@ export default function Home() {
       </div>
     </div>
   );
-}
+            }
+                     
