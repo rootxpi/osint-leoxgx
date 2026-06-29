@@ -6,14 +6,16 @@ export async function POST(request) {
   let url = "";
 
   if (tool === 'number') {
-    url = `https://number2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&mobile=${query}`;
-  } else if (tool === 'aadhaar') {
-        url = `https://adhaar-to-info-hidb-noobster.com-dashbord63hh7qe4.workers.dev/?aadhar=${query}`;
     
+    url = `https://number2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&mobile=${query}`;
+  } else if (tool === 'number-advance') {
+    
+    url = `https://number-aadvance-info-noobster.com-dashbord63hh7qe4.workers.dev/?key=demo&mobile=${query}`;
+  } else if (tool === 'aadhaar') {
+    url = `https://adhaar-to-info-hidb-noobster.com-dashbord63hh7qe4.workers.dev/?aadhar=${query}`;
   } else if (tool === 'vehicle') {
     url = `https://vehicle2info-noobster.com-dashbord63hh7qe4.workers.dev/?key=${KEY}&rc=${query}`;
   } else if (tool === 'vehicle-advance') {
-    // Advance vehicle API doesn't use the KEY parameter according to your previous code snippet
     url = `https://vehicleto-adavanceinfo-noobster.com-dashbord63hh7qe4.workers.dev/?rc=${query}`;
   } else if (tool === 'tg') {
     url = `https://tg-to-num-rate-limit.onrender.com/TG/user/=${query}`;
