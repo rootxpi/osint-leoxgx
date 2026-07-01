@@ -11,6 +11,8 @@ export default function Home() {
   const tools = [
     { id: "number", icon: "📱", label: "Number to Info", desc: "Basic phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
     { id: "number-advance", icon: "📲", label: "Number to Advance info", desc: "Deep phone intelligence", placeholder: "e.g., 9999999991 (10 digits only, NO +91 or spaces)" },
+    { id: "number-ultimate", icon: "🔥", label: "Phone number to ultimate info", desc: "Ultimate phone intelligence", placeholder: "e.g., 9999999991 (10 digits only)" },
+    
     { id: "aadhaar", icon: "🪪", label: "Aadhaar to Info", desc: "Aadhaar identity lookup", placeholder: "Enter 12 digits exactly (NO spaces)" },
     { id: "vehicle", icon: "🚗", label: "Vehicle to Info", desc: "Basic RC lookup", placeholder: "e.g., RJ18CF3690 (NO spaces or hyphens)" },
     { id: "vehicle-advance", icon: "🛻", label: "Vehicle Advance Info", desc: "Deep RC intelligence", placeholder: "e.g., RJ18CF3690 (NO spaces or hyphens)" },
@@ -124,7 +126,7 @@ export default function Home() {
           {!activeTool ? (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
               <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-1.5 text-[11px] text-gray-400 mb-8 shadow-sm">
-                <span className="text-purple-400">🔍</span> 8 intelligence tools ready
+                <span className="text-purple-400">🔍</span> 9 OSINT tools in free 
               </div>
               <h2 className="text-4xl sm:text-6xl font-extrabold mb-12 tracking-tight leading-tight">
                 <span className="text-transparent bg-clip-text bg-gradient-to-br from-white via-purple-200 to-fuchsia-300">Open-source</span><br/>
