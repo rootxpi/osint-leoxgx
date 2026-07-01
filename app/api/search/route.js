@@ -11,6 +11,10 @@ export async function POST(request) {
   } else if (tool === 'number-advance') {
     
     url = `https://number-aadvance-info-noobster.com-dashbord63hh7qe4.workers.dev/?key=demo&mobile=${query}`;
+
+    } else if (tool === 'number-ultimate') {
+    url = `https://numtoinfo.nonamearyan.workers.dev/?mobile=${query}`;
+  
   } else if (tool === 'aadhaar') {
     url = `https://adhaar-to-info-hidb-noobster.com-dashbord63hh7qe4.workers.dev/?aadhar=${query}`;
   } else if (tool === 'vehicle') {
